@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
+body { @apply bg-orange-50/40 text-zinc-800 antialiased; }
+.dark body { @apply bg-zinc-950 text-zinc-100; }
+.card { @apply bg-white rounded-2xl shadow-card border border-orange-100; }
+.dark .card { @apply bg-zinc-900 border-zinc-800; }
+.btn-primary { @apply bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl px-5 py-3 shadow-soft transition; }
+.btn-ghost { @apply bg-white hover:bg-orange-50 border border-orange-200 rounded-xl px-5 py-3 font-medium; }
+.dark .btn-ghost { @apply bg-zinc-800 border-zinc-700 hover:bg-zinc-700; }
