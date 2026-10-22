@@ -1,0 +1,12 @@
+{
+  auto_https off
+}
+
+:80 {
+  reverse_proxy app:3000
+}
+
+# Untuk HTTPS otomatis di VPS dengan domain, ganti :80 dengan domain kamu:
+# samarinda.example.com {
+#   reverse_proxy app:3000
+# }
