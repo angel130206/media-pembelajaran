@@ -1,17 +1,21 @@
 import { z } from "zod";
+
 export const registerSchema = z.object({
-  name: z.string().min(2, "Nama minimal 2 huruf").max(100),
-  email: z.string().email("Email tidak valid"),
-  password: z.string().min(6, "Kata sandi minimal 6 karakter").max(100),
+  name: z.string().trim().min(2, "Nama minimal 2 huruf").max(100, "Nama maksimal 100 huruf").transform(v => v.trim()),
+  email: z.string().trim().toLowerCase().email("Format email tidak valid").max(255).transform(v => v.trim().toLowerCase()),
+  password: z.string().min(6, "Kata sandi minimal 6 karakter").max(100, "Kata sandi maksimal 100 karakter"),
 });
+
 export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+  email: z.string().trim().toLowerCase().email("Format email tidak valid"),
+  password: z.string().min(1, "Kata sandi wajib diisi"),
 });
+
 export const onboardingSchema = z.object({
   minat: z.enum(["kuliner","fashion","jasa","kerajinan","digital","lainnya"]),
   pengalaman: z.enum(["pemula","pernah_jualan"]),
 });
+
 export const materiSchema = z.object({
   judul: z.string().min(3).max(200),
   slug: z.string().min(3).max(200).optional(),
@@ -43,6 +47,6 @@ export const csvSoalRow = z.object({
   opsi_b: z.string(),
   opsi_c: z.string(),
   opsi_d: z.string(),
-  kunci: z.string(), // A-D or 0-3
+  kunci: z.string(),
   pembahasan: z.string().optional(),
 });

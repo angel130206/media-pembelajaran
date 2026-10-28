@@ -1,14 +1,28 @@
 "use client";
 import { useState } from "react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 export default function TandaiSelesaiButton({ materiId }: { materiId: string }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
   async function handle() {
+    setErr("");
     setLoading(true);
-    const res = await fetch("/api/progress", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ materiId }) });
+    try {
+      const res = await fetch("/api/progress", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ materiId }) });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(data.error || "Gagal menyimpan");
+      setDone(true);
+    } catch (e:any) { setErr(e.message); }
     setLoading(false);
-    if (res.ok) setDone(true);
   }
-  if (done) return <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-xl text-center font-semibold">✅ Materi ditandai selesai! +10 poin</div>;
-  return <button onClick={handle} disabled={loading} className="btn-primary w-full">{loading?"Menyimpan...":"Tandai selesai & dapatkan poin"}</button>;
+  if (done) return <div className="w-full flex items-center justify-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl font-semibold"><CheckCircle2 className="w-5 h-5" /> Selesai! +10 poin ditambahkan</div>;
+  return (
+    <div className="w-full">
+      <button onClick={handle} disabled={loading} className="btn-primary w-full inline-flex items-center justify-center gap-2">
+        {loading && <Loader2 className="w-4 h-4 animate-spin" />} {loading?"Menyimpan...":"Tandai selesai & dapatkan 10 poin"}
+      </button>
+      {err && <p className="text-xs text-red-600 mt-2 text-center">{err}</p>}
+    </div>
+  );
 }
